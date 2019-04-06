@@ -1,24 +1,18 @@
-# express-boilerplate
+# BackEnd Application for Chat Application 
 
-> Simple Express Backend w/ Webpack, ES6, ESLint, Hot-Reload Template
+> Simple Chat application
 
 ## Includes
 
-- Webpack 3
-- Babel (ES6, babel-preset-env)
-- Hot-Reload
-- ESLint w/ Standard
-- Express
+- Creating Rooms
+- Send Messages in Room
 
 ## Usage
 
 ```bash
-git clone https://github.com/chryb/express-boilerplate
+git clone https://github.com/ashifa454/mcr-backend
 
-cd express-boilerplate
-
-# make it to your own
-rm -rf .git
+cd project folder
 
 npm install
 
@@ -30,7 +24,4 @@ npm run build
 
 # build & start
 npm start
-
-# test
-npm run unit
 ```
