@@ -16,9 +16,10 @@ module.exports = (io) => {
         });
         rooms = [room, ...rooms]
         socket.broadcast.emit('newRoomList', rooms);
+        socket.emit('connectedToRoom', rooms[0]);
+      } else {
+        socket.emit('connectedToRoom', rooms[roomIdx]);
       }
-
-      socket.emit('connectedToRoom', rooms[roomIdx]);
     });
     socket.on('getAllMessages', async data => {
       let allMessages = [];
