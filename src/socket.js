@@ -5,27 +5,32 @@ module.exports = (io) => {
   io.on('connection', socket => {
     socket.on('joinRoom', async data => {
       socket.join(data.roomName);
-      const rooms = await getAllRooms().catch((err) => {
+      let rooms = await getAllRooms().catch((err) => {
         console.error('error in finding room', err);
 
       })
-      if (rooms.findIndex((item) => item.roomName === data.roomName) < 0) {
+      const roomIdx = rooms.findIndex((item) => item.name === data.roomName);
+      if (roomIdx < 0) {
         const room = await addRoom(data.roomName).catch((err) => {
           console.error('error in adding room', err);
         });
-        socket.broadcast.emit('newRoomList', [room, ...rooms]);
+        rooms = [room, ...rooms]
+        socket.broadcast.emit('newRoomList', rooms);
       }
-      io.to(socket.id).emit('connectedToRoom');
+
+      socket.emit('connectedToRoom', rooms[roomIdx]);
     });
     socket.on('getAllMessages', async data => {
-      const allMessages = await getAllMessages(data.roomName).catch((err) => {
-        console.error('error in finding messages', err);
-      });
+      let allMessages = [];
+      if (data.roomId) {
+        allMessages = await getAllMessages(data.roomId).catch((err) => {
+          console.error('error in finding messages', err);
+        });
+      }
       socket.emit('allMessages', allMessages);
     });
     socket.on('message', async data => {
       const { roomName } = data;
-      console.log('here is data', data);
       await addMessage(data).catch((err) => {
         console.error('error in adding message', err);
       });
